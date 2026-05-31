@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8995614694689602181}
@@ -50,9 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTime: 0
   isDespawning: 0
-  itemId: 0
-  score: 2
-  nextItem: {fileID: 0}
+  itemId: 5
+  score: 4
+  nextItem: {fileID: -7458252449935738429, guid: 7aa5f1184d281784aa7cd9ec1e9b0f18, type: 3}
   drag: 1.5
   rotationDrag: 0.5
   shootVelocity: 10

@@ -102,8 +102,10 @@ public class Item : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.white;
         SphereCollider trigger = (mergeTrigger as SphereCollider);
+        if (trigger == null) return;
+
+        Gizmos.color = Color.white;
         Vector3 triggerCenter = trigger.transform.TransformPoint(trigger.center);
         Gizmos.DrawWireSphere(triggerCenter, trigger.radius * currentScale);
     }
