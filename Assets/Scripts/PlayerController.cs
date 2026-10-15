@@ -2,10 +2,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using frare.Vector3Extensions;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Transform aimPoint;
+    [SerializeField] private BoxCollider2D aimZone;
     [SerializeField] private float moveSpeed;
-    [SerializeField] private PlayerInput playerInput;
 
     private Vector3 moveInput;
     private Item currentItem;
@@ -19,7 +21,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!Vector3Extensions.Approximately(moveInput, Vector3.zero))
         {
-            this.transform.position += moveSpeed * Time.deltaTime * moveInput;
+            MoveAimClampedToZone(aimPoint.position + (moveSpeed * Time.deltaTime * moveInput));
         }
     }
 
@@ -44,9 +46,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnPointer(InputValue value)
+    {
+        MoveAimClampedToZone(Camera.main.ScreenToWorldPoint(value.Get<Vector2>()));
+    }
+
     private void SetupNewItem()
     {
-        currentItem = ItemSpawner.Instance.SpawnItem(this.transform);
+        currentItem = ItemSpawner.Instance.SpawnItem(aimPoint);
         currentItem.Freeze();
         currentItem.onFinishedMoving += OnItemFinishedMoving;
     }
@@ -56,5 +63,17 @@ public class PlayerController : MonoBehaviour
         if (currentItem != null) currentItem.onFinishedMoving -= OnItemFinishedMoving;
         currentItem = null;
         SetupNewItem();
+    }
+
+    private void MoveAimClampedToZone(Vector3 targetPosition)
+    {
+        aimPoint.position = targetPosition;
+
+        // clamp to the aim zone
+        var resultX = Mathf.Clamp(aimPoint.position.x, aimZone.bounds.min.x, aimZone.bounds.max.x);
+        var resultY = Mathf.Clamp(aimPoint.position.y, aimZone.bounds.min.y, aimZone.bounds.max.y);
+
+        // Z is always 0 since this is a 2D game
+        aimPoint.position = new Vector3(resultX, resultY, 0f);
     }
 }

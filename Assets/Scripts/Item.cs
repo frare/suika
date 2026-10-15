@@ -57,6 +57,11 @@ public class Item : MonoBehaviour
         TryMerge(collision);
     }
 
+    protected virtual void OnDestroy()
+    {
+        spriteContainer.DOKill();
+    }
+
     public virtual void Freeze()
     {
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
