@@ -1,6 +1,6 @@
-using frare.Vector3Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using frare.Vector3Extensions;
 
 public class PlayerController : MonoBehaviour
 {

@@ -30,7 +30,7 @@ public class HeightLimitManager : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.attachedRigidbody != null && other.attachedRigidbody.TryGetComponent(out Item item))
         {
@@ -42,7 +42,7 @@ public class HeightLimitManager : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.attachedRigidbody != null && other.attachedRigidbody.TryGetComponent(out Item item))
         {
