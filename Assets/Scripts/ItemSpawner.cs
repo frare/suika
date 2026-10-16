@@ -9,9 +9,13 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
     [SerializeField] private List<Item> items;
 
+    private Item nextItem;
+
     protected override void Awake()
     {
         base.Awake();
+
+        nextItem = items.GetRandom();
     }
 
     protected override void OnDestroy()
@@ -21,8 +25,17 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
     public Item SpawnItem(Transform target)
     {
-        Item item = items.GetRandom();
-        Item instance = Instantiate(items.GetRandom(), target.transform.position, item.transform.rotation, target);
+        Item item = nextItem;
+        Item instance = Instantiate(item, target.transform.position, item.transform.rotation, target);
+
+        SetupNextItem();
+
         return instance;
+    }
+
+    private void SetupNextItem()
+    {
+        nextItem = items.GetRandom();
+        MainCanvas.Instance.UpdateNextItem(nextItem);
     }
 }

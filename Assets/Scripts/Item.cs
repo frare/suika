@@ -7,20 +7,20 @@ using DG.Tweening;
 public class Item : MonoBehaviour
 {
     public bool FinishedMoving => finishedMoving;
+    public Sprite SpriteGraphic => spriteRenderer.sprite;
 
-    public Action onFinishedMoving;
-    public Action onDestroying;
+    public Action OnFinishedMoving;
+    public Action OnDestroying;
 
     [HideInInspector] public float spawnTime;
     [HideInInspector] public bool isDespawning;
 
-    [SerializeField] protected int itemId = -1;
     [SerializeField] protected int score = 0;
     [SerializeField] protected Item nextItem;
-    [SerializeField] protected float drag = 1.5f;
-    [SerializeField] protected float rotationDrag = 0.5f;
     
+    [Header("References")]
     [SerializeField] protected Transform spriteContainer;
+    [SerializeField] protected SpriteRenderer spriteRenderer;
 
     protected float currentScale = 1f;
     protected bool wasShot = false;
@@ -34,16 +34,12 @@ public class Item : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         mergeCollider = GetComponent<Collider2D>();
 
-        rb.linearDamping = drag;
-        rb.angularDamping = rotationDrag;
         spawnTime = Time.time;
 
         // bounce animation
         spriteContainer.localScale = Vector3.one;
         spriteContainer.DOScale(1.2f, 0.1f)
             .SetLoops(2, LoopType.Yoyo);
-
-        if (itemId == -1) Debug.LogError($"{name}:item id is -1! set an item id for this prefab");
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
@@ -51,7 +47,7 @@ public class Item : MonoBehaviour
         if (wasShot && !finishedMoving)
         {
             finishedMoving = true;
-            onFinishedMoving?.Invoke();
+            OnFinishedMoving?.Invoke();
         }
 
         TryMerge(collision);
@@ -78,8 +74,8 @@ public class Item : MonoBehaviour
     {
         isDespawning = true;
 
-        onFinishedMoving?.Invoke();
-        onDestroying?.Invoke();
+        OnFinishedMoving?.Invoke();
+        OnDestroying?.Invoke();
 
         Destroy(this.gameObject);
     }
@@ -91,7 +87,7 @@ public class Item : MonoBehaviour
 
         if (collision.collider.attachedRigidbody != null && collision.collider.attachedRigidbody.TryGetComponent(out Item otherItem))
         {
-            if (this.itemId == otherItem.itemId
+            if (this.nextItem == otherItem.nextItem
             && this.isDespawning == false && otherItem.isDespawning == false)
             {
                 // OLDER handles the merging and persists

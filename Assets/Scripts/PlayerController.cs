@@ -55,12 +55,12 @@ public class PlayerController : MonoBehaviour
     {
         currentItem = ItemSpawner.Instance.SpawnItem(aimPoint);
         currentItem.Freeze();
-        currentItem.onFinishedMoving += OnItemFinishedMoving;
+        currentItem.OnFinishedMoving += OnItemFinishedMoving;
     }
 
     private void OnItemFinishedMoving()
     {
-        if (currentItem != null) currentItem.onFinishedMoving -= OnItemFinishedMoving;
+        if (currentItem != null) currentItem.OnFinishedMoving -= OnItemFinishedMoving;
         currentItem = null;
         SetupNewItem();
     }

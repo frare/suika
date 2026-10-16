@@ -1,12 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using frare;
 
-public class HUDManager : Singleton<HUDManager>
+public class MainCanvas : Singleton<MainCanvas>
 {
     protected override bool DontDestroyWhenLoad => false;
 
     [SerializeField] private TMP_Text scoreTmp;
+    [SerializeField] private Image nextItemImage;
 
     protected override void Awake()
     {
@@ -21,5 +23,10 @@ public class HUDManager : Singleton<HUDManager>
     public void UpdateScore(int score)
     {
         scoreTmp.text = $"Score: {score}";
+    }
+
+    public void UpdateNextItem(Item item)
+    {
+        nextItemImage.sprite = item.SpriteGraphic;
     }
 }
