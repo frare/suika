@@ -20,6 +20,6 @@ public class GameManager : Singleton<GameManager>
     public void AddScore(int amount)
     {
         totalScore += amount;
-        HUDManager.Instance.UpdateScore(totalScore);
+        MainCanvas.Instance.UpdateScore(totalScore);
     }
 }
