@@ -27,12 +27,10 @@ public class Item : MonoBehaviour
     protected bool finishedMoving = false;
 
     protected Rigidbody2D rb;
-    protected Collider2D mergeCollider;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        mergeCollider = GetComponent<Collider2D>();
 
         spawnTime = Time.time;
 
@@ -101,6 +99,7 @@ public class Item : MonoBehaviour
     {
         GameManager.Instance.AddScore(this.score + other.score);
         Instantiate(nextItem.gameObject, rb.position, Quaternion.Euler(new Vector3(0f, 0f, rb.rotation)));
+        ParticlesManager.Instance.PlayMergeParticles(rb.position);
 
         other.Despawn();
         this.Despawn();
