@@ -6,17 +6,11 @@ public class HeightLimitManager : MonoBehaviour
     public bool IsLimitReached => isLimitReached;
 
     [SerializeField] private float maxLimitTimer = 10f;
-    [SerializeField] private MeshRenderer limitRenderer;
+    [SerializeField] private SpriteRenderer limitRenderer;
 
     private bool isLimitReached;
     private float limitTimer;
-    private Material limitMaterial;
     private readonly List<Item> itemsInsideLimit = new();
-
-    private void Awake()
-    {
-        limitMaterial = limitRenderer.material;
-    }
 
     private void Update()
     {
@@ -61,12 +55,12 @@ public class HeightLimitManager : MonoBehaviour
         if (isLimitReached)
         {
             limitTimer = maxLimitTimer;
-            limitMaterial.color = new Color(1f, 0f, 0f, 0.2f);
+            limitRenderer.color = new Color(1f, 0f, 0f, 0.2f);
         }
         else
         {
             limitTimer = 0f;
-            limitMaterial.color = new Color(1f, 1f, 1f, 0.2f);
+            limitRenderer.color = new Color(1f, 1f, 1f, 0.2f);
         }
     }
 }
