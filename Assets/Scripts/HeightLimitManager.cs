@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HeightLimitManager : MonoBehaviour
@@ -6,52 +7,60 @@ public class HeightLimitManager : MonoBehaviour
     public bool IsLimitReached => isLimitReached;
 
     [SerializeField] private float maxLimitTimer = 10f;
+    [SerializeField] private BoxCollider2D detectionBox;
+    [SerializeField] private LayerMask detectionLayers;
     [SerializeField] private SpriteRenderer limitRenderer;
 
     private bool isLimitReached;
     private float limitTimer;
-    private readonly List<Item> itemsInsideLimit = new();
 
-    private void Update()
+    private ContactFilter2D contactFilter;
+    private readonly List<Collider2D> contactResults = new();
+
+    private void Awake()
     {
-        if (isLimitReached)
+        contactFilter = new ContactFilter2D();
+        contactFilter.SetLayerMask(detectionLayers);
+        contactFilter.useTriggers = false;
+    }
+
+    private void FixedUpdate()
+    {
+        if (ScanForItems())
         {
-            limitTimer -= Time.deltaTime;
+            limitTimer -= Time.fixedDeltaTime;
             if (limitTimer <= 0 )
             {
                 Debug.Log($"{name}:game over, items overlapping the limit for too long");
             }
         }
+        else limitTimer = maxLimitTimer;
+
+        UpdateLimitGraphic(isLimitReached);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private bool ScanForItems()
     {
-        if (other.attachedRigidbody != null && other.attachedRigidbody.TryGetComponent(out Item item))
+        isLimitReached = false;
+
+        detectionBox.Overlap(contactFilter, contactResults);
+        foreach (var hit in contactResults)
         {
-            if (item.FinishedMoving && !itemsInsideLimit.Contains(item))
+            if (hit.attachedRigidbody.TryGetComponent(out Item item))
             {
-                itemsInsideLimit.Add(item);
-                UpdateLimit();
+                if (item.IsReady)
+                {
+                    isLimitReached = true;
+                    break;
+                }
             }
         }
+
+        return isLimitReached;
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void UpdateLimitGraphic(bool isLimitReached)
     {
-        if (other.attachedRigidbody != null && other.attachedRigidbody.TryGetComponent(out Item item))
-        {
-            if (item.FinishedMoving && itemsInsideLimit.Contains(item))
-            {
-                itemsInsideLimit.Remove(item);
-                UpdateLimit();
-            }
-        }
-    }
-
-    private void UpdateLimit()
-    {
-        isLimitReached = itemsInsideLimit.Count > 0;
-
         if (isLimitReached)
         {
             limitTimer = maxLimitTimer;

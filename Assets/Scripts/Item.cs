@@ -6,10 +6,10 @@ using DG.Tweening;
 [RequireComponent(typeof(Collider2D))]
 public class Item : MonoBehaviour
 {
-    public bool FinishedMoving => finishedMoving;
+    public bool IsReady => isReady;
     public Sprite SpriteGraphic => spriteRenderer.sprite;
 
-    public Action OnFinishedMoving;
+    public Action OnReady;
     public Action OnDestroying;
 
     [HideInInspector] public float spawnTime;
@@ -24,13 +24,15 @@ public class Item : MonoBehaviour
 
     protected float currentScale = 1f;
     protected bool wasShot = false;
-    protected bool finishedMoving = false;
+    protected bool isReady = true;
 
     protected Rigidbody2D rb;
+    protected Collider2D mergeCollider;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        mergeCollider = GetComponent<Collider2D>();
 
         spawnTime = Time.time;
 
@@ -42,10 +44,10 @@ public class Item : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (wasShot && !finishedMoving)
+        if (wasShot && !isReady)
         {
-            finishedMoving = true;
-            OnFinishedMoving?.Invoke();
+            isReady = true;
+            OnReady?.Invoke();
         }
 
         TryMerge(collision);
@@ -53,11 +55,14 @@ public class Item : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
+        // cleanup for DOTween
         spriteContainer.DOKill();
     }
 
     public virtual void Freeze()
     {
+        isReady = false;
+        mergeCollider.enabled = false;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
@@ -65,6 +70,7 @@ public class Item : MonoBehaviour
     {
         wasShot = true;
         transform.parent = null;
+        mergeCollider.enabled = true;
         rb.constraints = RigidbodyConstraints2D.None;
     }
 
@@ -72,7 +78,7 @@ public class Item : MonoBehaviour
     {
         isDespawning = true;
 
-        OnFinishedMoving?.Invoke();
+        OnReady?.Invoke();
         OnDestroying?.Invoke();
 
         Destroy(this.gameObject);

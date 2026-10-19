@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 5732072326606742593}
   - component: {fileID: 7266314844605697973}
   - component: {fileID: 7977319312996421597}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Chick (Item)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,8 +138,6 @@ MonoBehaviour:
   isDespawning: 0
   score: 1
   nextItem: {fileID: 6259267341739755736, guid: 8d660554e1e8fe9479446ea21570aa72, type: 3}
-  drag: 1.5
-  rotationDrag: 0.5
   spriteContainer: {fileID: 7599701168714139686}
   spriteRenderer: {fileID: 6163665809650626771}
 --- !u!50 &7266314844605697973
