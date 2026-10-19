@@ -41,11 +41,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _SpeedX: 0.17
-    - _SpeedY: 0.1
+    - _SpeedX: 0.085
+    - _SpeedY: 0.05
     m_Colors:
-    - _BackgroundColor: {r: 0.9056604, g: 0.46564615, b: 0.5528904, a: 1}
-    - _PatternColor: {r: 1, g: 1, b: 1, a: 0.20392157}
+    - _BackgroundColor: {r: 0.9056604, g: 0.4485582, b: 0.538346, a: 1}
+    - _PatternColor: {r: 1, g: 0.952414, b: 0.3066038, a: 0.20392157}
     - _ScrollSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _TilingFactor: {r: 8, g: 18, b: 0, a: 0}
   m_BuildTextureStacks: []
