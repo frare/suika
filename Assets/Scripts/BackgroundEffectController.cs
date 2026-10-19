@@ -1,38 +1,30 @@
-using System;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class BackgroundEffectController : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private float speedX;
-    [SerializeField] private float speedY;
-    [SerializeField] private Vector2 tilingFactor;
-    [SerializeField] private Color backgroundColor;
-    [SerializeField] private Color patternColor;
+    private Material defaultMaterial;
+    private Material runtimeMaterial;
+
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
-        ApplyMaterialValues();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        defaultMaterial = spriteRenderer.sharedMaterial;
+        runtimeMaterial = new Material(defaultMaterial);
+
+        spriteRenderer.sharedMaterial = runtimeMaterial;
     }
 
-    private void OnValidate()
+    private void OnDestroy()
     {
-        ApplyMaterialValues();
-    }
+        if (spriteRenderer != null && spriteRenderer.sharedMaterial == runtimeMaterial)
+        {
+            spriteRenderer.sharedMaterial = defaultMaterial;
+        }
 
-    private void ApplyMaterialValues()
-    {
-        try
-        {
-            spriteRenderer.material.SetFloat("_SpeedX", speedX);
-            spriteRenderer.material.SetFloat("_SpeedY", speedY);
-            spriteRenderer.material.SetVector("_TilingFactor", tilingFactor);
-            spriteRenderer.material.SetColor("_BackgroundColor", backgroundColor);
-            spriteRenderer.material.SetColor("_PatternColor", patternColor);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"{name}:{e}");
-        }
+        if (runtimeMaterial != null) Destroy(runtimeMaterial);
     }
 }
