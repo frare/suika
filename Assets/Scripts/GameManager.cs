@@ -5,7 +5,11 @@ public class GameManager : Singleton<GameManager>
 {
     protected override bool DontDestroyWhenLoad => false;
 
+    public int TotalScore => totalScore;
+    public bool IsGameOver => isGameOver;
+
     private int totalScore;
+    private bool isGameOver;
 
     protected override void Awake()
     {
@@ -21,5 +25,13 @@ public class GameManager : Singleton<GameManager>
     {
         totalScore += amount;
         MainCanvas.Instance.UpdateScore(totalScore);
+    }
+
+    public void GameOver()
+    {
+        isGameOver = true;
+        Time.timeScale = 0f;
+
+        MainCanvas.Instance.ShowGameOverPanel();
     }
 }

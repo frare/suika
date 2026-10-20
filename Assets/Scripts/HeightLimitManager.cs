@@ -31,7 +31,7 @@ public class HeightLimitManager : MonoBehaviour
             limitTimer -= Time.fixedDeltaTime;
             if (limitTimer <= 0 )
             {
-                Debug.Log($"{name}:game over, items overlapping the limit for too long");
+                GameManager.Instance.GameOver();
             }
         }
         else limitTimer = maxLimitTimer;

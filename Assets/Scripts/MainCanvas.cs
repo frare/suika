@@ -9,10 +9,14 @@ public class MainCanvas : Singleton<MainCanvas>
 
     [SerializeField] private TMP_Text scoreTmp;
     [SerializeField] private Image nextItemImage;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TMP_Text gameOverScoreTmp;
 
     protected override void Awake()
     {
         base.Awake();
+
+        gameOverPanel.SetActive(false);
     }
 
     protected override void OnDestroy()
@@ -28,5 +32,11 @@ public class MainCanvas : Singleton<MainCanvas>
     public void UpdateNextItem(Item item)
     {
         nextItemImage.sprite = item.SpriteGraphic;
+    }
+
+    public void ShowGameOverPanel()
+    {
+        gameOverPanel.SetActive(true);
+        gameOverScoreTmp.text = $"{GameManager.Instance.TotalScore}";
     }
 }
