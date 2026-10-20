@@ -7,12 +7,13 @@ using DG.Tweening;
 public class Item : MonoBehaviour
 {
     public bool IsReady => isReady;
+    public Vector2 Position => rb.position;
     public Sprite SpriteGraphic => spriteRenderer.sprite;
+    public float SpawnOrder => spawnOrder;
 
     public Action OnReady;
     public Action OnDestroying;
 
-    [HideInInspector] public float spawnTime;
     [HideInInspector] public bool isDespawning;
 
     [SerializeField] protected int score = 0;
@@ -22,9 +23,11 @@ public class Item : MonoBehaviour
     [SerializeField] protected Transform spriteContainer;
     [SerializeField] protected SpriteRenderer spriteRenderer;
 
-    protected float currentScale = 1f;
+    protected static long nextSpawnOrder;
+    
     protected bool wasShot = false;
     protected bool isReady = true;
+    protected long spawnOrder;
 
     protected Rigidbody2D rb;
     protected Collider2D mergeCollider;
@@ -34,7 +37,7 @@ public class Item : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         mergeCollider = GetComponent<Collider2D>();
 
-        spawnTime = Time.time;
+        spawnOrder = nextSpawnOrder++;
 
         // bounce animation
         spriteContainer.localScale = Vector3.one;
@@ -50,7 +53,10 @@ public class Item : MonoBehaviour
             OnReady?.Invoke();
         }
 
-        TryMerge(collision);
+        if (collision.collider.attachedRigidbody != null && collision.collider.attachedRigidbody.TryGetComponent(out Item otherItem))
+        {
+            TryMerge(otherItem);
+        }
     }
 
     protected virtual void OnDestroy()
@@ -84,30 +90,33 @@ public class Item : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    protected virtual void TryMerge(Collision2D collision)
+    protected virtual void TryMerge(Item otherItem)
     {
         // dont try to merge if final tier
         if (nextItem == null) return;
 
-        if (collision.collider.attachedRigidbody != null && collision.collider.attachedRigidbody.TryGetComponent(out Item otherItem))
+        if (this.nextItem == otherItem.nextItem
+        && this.isDespawning == false && otherItem.isDespawning == false)
         {
-            if (this.nextItem == otherItem.nextItem
-            && this.isDespawning == false && otherItem.isDespawning == false)
-            {
-                // OLDER handles the merging and persists
-                // the other gets destroyed
-                if (this.spawnTime < otherItem.spawnTime) MergeToNextLevel(otherItem);
-            }
+            // OLDER handles the merging and persists
+            // the other gets destroyed
+            if (this.spawnOrder < otherItem.spawnOrder) MergeToNextLevel(otherItem);
         }
     }
 
-    protected virtual void MergeToNextLevel(Item other)
+    protected virtual void MergeToNextLevel(Item otherItem)
     {
-        GameManager.Instance.AddScore(this.score + other.score);
-        Instantiate(nextItem.gameObject, rb.position, Quaternion.Euler(new Vector3(0f, 0f, rb.rotation)));
-        ParticlesManager.Instance.PlayMergeParticles(rb.position);
+        Debug.Log($"{transform.GetInstanceID()}: entered MergeToNextLevel {otherItem.transform.GetInstanceID()}");
 
-        other.Despawn();
+        var targetPosition = (rb.position + otherItem.Position) / 2f;
+
+        Instantiate(nextItem.gameObject, targetPosition, Quaternion.Euler(new Vector3(0f, 0f, rb.rotation)));
+
+        ParticlesManager.Instance.PlayMergeParticles(targetPosition);
+
+        GameManager.Instance.AddScore(this.score + otherItem.score);
+
+        otherItem.Despawn();
         this.Despawn();
     }
 }
