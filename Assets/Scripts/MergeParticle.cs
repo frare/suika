@@ -11,6 +11,8 @@ public class MergeParticle : MonoBehaviour
     private void Awake()
     {
         particlesSystem = GetComponent<ParticleSystem>();
+        var main = particlesSystem.main;
+        main.stopAction = ParticleSystemStopAction.Callback;
     }
 
     private void OnEnable()
@@ -18,5 +20,11 @@ public class MergeParticle : MonoBehaviour
         particlesSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
         particlesSystem.Play();
+    }
+
+    // called automatically through main's ParticleSystemStopAction.Callback
+    private void OnParticleSystemStopped()
+    {
+        OnFinished?.Invoke();
     }
 }
