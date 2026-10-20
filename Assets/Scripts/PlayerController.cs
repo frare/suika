@@ -25,14 +25,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(this.transform.position, 0.5f);
-    }
-#endif
-
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
