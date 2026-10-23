@@ -12,7 +12,7 @@ public class HeightLimitManager : MonoBehaviour
     [SerializeField] private SpriteRenderer limitRenderer;
 
     private bool isLimitReached;
-    private float limitTimer;
+    private float currentLimitTimer = 0f;
 
     private ContactFilter2D contactFilter;
     private readonly List<Collider2D> contactResults = new();
@@ -26,23 +26,23 @@ public class HeightLimitManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (ScanForItems())
+        isLimitReached = ScanForItems();
+
+        if (isLimitReached)
         {
-            limitTimer -= Time.fixedDeltaTime;
-            if (limitTimer <= 0 )
+            currentLimitTimer += Time.fixedDeltaTime;
+            if (currentLimitTimer >= maxLimitTimer)
             {
                 GameManager.Instance.GameOver();
             }
         }
-        else limitTimer = maxLimitTimer;
+        else currentLimitTimer = 0f;
 
         UpdateLimitGraphic(isLimitReached);
     }
 
     private bool ScanForItems()
     {
-        isLimitReached = false;
-
         detectionBox.Overlap(contactFilter, contactResults);
         foreach (var hit in contactResults)
         {
@@ -50,25 +50,22 @@ public class HeightLimitManager : MonoBehaviour
             {
                 if (item.IsReady)
                 {
-                    isLimitReached = true;
-                    break;
+                    return true;
                 }
             }
         }
 
-        return isLimitReached;
+        return false;
     }
 
     private void UpdateLimitGraphic(bool isLimitReached)
     {
         if (isLimitReached)
         {
-            limitTimer = maxLimitTimer;
             limitRenderer.color = new Color(1f, 0f, 0f, 0.2f);
         }
         else
         {
-            limitTimer = 0f;
             limitRenderer.color = new Color(1f, 1f, 1f, 0.2f);
         }
     }
