@@ -9,6 +9,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D aimZone;
     [SerializeField] private float moveSpeed;
 
+    private float AimRadiusOffset
+    {
+        get
+        {
+            if (currentItem == null) return 0f;
+            else return currentItem.Radius + 0.02f; // add a small offset so the items don't bump into the lateral walls
+        }
+    }
+
     private Vector3 moveInput;
     private Item currentItem;
 
@@ -62,8 +71,8 @@ public class PlayerController : MonoBehaviour
         aimPoint.position = targetPosition;
 
         // clamp to the aim zone
-        var resultX = Mathf.Clamp(aimPoint.position.x, aimZone.bounds.min.x, aimZone.bounds.max.x);
-        var resultY = Mathf.Clamp(aimPoint.position.y, aimZone.bounds.min.y, aimZone.bounds.max.y);
+        var resultX = Mathf.Clamp(aimPoint.position.x, aimZone.bounds.min.x + AimRadiusOffset, aimZone.bounds.max.x - AimRadiusOffset);
+        var resultY = aimZone.transform.position.y;
 
         // Z is always 0 since this is a 2D game
         aimPoint.position = new Vector3(resultX, resultY, 0f);

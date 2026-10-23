@@ -10,6 +10,7 @@ public class Item : MonoBehaviour
     public Vector2 Position => rb.position;
     public Sprite SpriteGraphic => spriteRenderer.sprite;
     public float SpawnOrder => spawnOrder;
+    public float Radius => mergeCollider.radius * transform.localScale.x;
 
     public Action OnReady;
     public Action OnDestroying;
@@ -30,12 +31,12 @@ public class Item : MonoBehaviour
     protected long spawnOrder;
 
     protected Rigidbody2D rb;
-    protected Collider2D mergeCollider;
+    protected CircleCollider2D mergeCollider;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        mergeCollider = GetComponent<Collider2D>();
+        mergeCollider = GetComponent<CircleCollider2D>();
 
         spawnOrder = nextSpawnOrder++;
 
@@ -106,8 +107,6 @@ public class Item : MonoBehaviour
 
     protected virtual void MergeToNextLevel(Item otherItem)
     {
-        Debug.Log($"{transform.GetInstanceID()}: entered MergeToNextLevel {otherItem.transform.GetInstanceID()}");
-
         var targetPosition = (rb.position + otherItem.Position) / 2f;
 
         Instantiate(nextItem.gameObject, targetPosition, Quaternion.Euler(new Vector3(0f, 0f, rb.rotation)));
