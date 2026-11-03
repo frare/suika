@@ -12,7 +12,7 @@ public class Item : MonoBehaviour
     public float SpawnOrder => spawnOrder;
     public float Radius => mergeCollider.radius * transform.localScale.x;
 
-    public Action OnReady;
+    // public Action OnReady;
     public Action OnDestroying;
 
     [HideInInspector] public bool isDespawning;
@@ -51,7 +51,7 @@ public class Item : MonoBehaviour
         if (wasShot && !isReady)
         {
             isReady = true;
-            OnReady?.Invoke();
+            // OnReady?.Invoke();
         }
 
         if (collision.collider.attachedRigidbody != null && collision.collider.attachedRigidbody.TryGetComponent(out Item otherItem))
@@ -85,7 +85,7 @@ public class Item : MonoBehaviour
     {
         isDespawning = true;
 
-        OnReady?.Invoke();
+        // OnReady?.Invoke();
         OnDestroying?.Invoke();
 
         Destroy(this.gameObject);
@@ -112,6 +112,7 @@ public class Item : MonoBehaviour
         Instantiate(nextItem.gameObject, targetPosition, Quaternion.Euler(new Vector3(0f, 0f, rb.rotation)));
 
         ParticlesManager.Instance.PlayMergeParticles(targetPosition);
+        AudioManager.Instance.PlayMergeSfx();
 
         GameManager.Instance.AddScore(this.score);
 

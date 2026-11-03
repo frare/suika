@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using frare.Vector3Extensions;
+using frare.CoroutineHelper;
+using System.Collections;
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private float shootCooldown;
     [SerializeField] private Transform aimPoint;
     [SerializeField] private BoxCollider2D aimZone;
     [SerializeField] private float moveSpeed;
@@ -18,9 +21,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private Coroutine shootTimerCoroutine;
     private Vector3 moveInput;
     private Item currentItem;
 
+#region UNITY CALLBACKS
     private void Start()
     {
         SetupNewItem();
@@ -33,7 +38,9 @@ public class PlayerController : MonoBehaviour
             MoveAimClampedToZone(aimPoint.position + (moveSpeed * Time.deltaTime * moveInput));
         }
     }
+#endregion
 
+#region INPUT SYSTEM CALLBACKS
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -44,6 +51,7 @@ public class PlayerController : MonoBehaviour
         if (currentItem != null)
         {
             currentItem.Release();
+            CoroutineHelper.StartCoroutineOverride(this, ref shootTimerCoroutine, ShotCooldown());
         }
     }
 
@@ -51,19 +59,18 @@ public class PlayerController : MonoBehaviour
     {
         MoveAimClampedToZone(Camera.main.ScreenToWorldPoint(value.Get<Vector2>()));
     }
+#endregion
+
+    private IEnumerator ShotCooldown()
+    {
+        yield return new WaitForSeconds(shootCooldown);
+        SetupNewItem();
+    }
 
     private void SetupNewItem()
     {
         currentItem = ItemSpawner.Instance.SpawnItem(aimPoint);
         currentItem.Freeze();
-        currentItem.OnReady += OnItemFinishedMoving;
-    }
-
-    private void OnItemFinishedMoving()
-    {
-        if (currentItem != null) currentItem.OnReady -= OnItemFinishedMoving;
-        currentItem = null;
-        SetupNewItem();
     }
 
     private void MoveAimClampedToZone(Vector3 targetPosition)
