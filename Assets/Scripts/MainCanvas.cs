@@ -39,7 +39,7 @@ public class MainCanvas : Singleton<MainCanvas>
 
     private void OnMainMenuButtonClicked()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MenuScene");
     }
 
     public void UpdateScore(int score)
