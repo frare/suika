@@ -10,6 +10,8 @@ public class HeightLimitManager : MonoBehaviour
     [SerializeField] private BoxCollider2D detectionBox;
     [SerializeField] private LayerMask detectionLayers;
     [SerializeField] private SpriteRenderer limitRenderer;
+    [SerializeField] private Color limitIdleColor;
+    [SerializeField] private Color limitReachedColor;
 
     private bool isLimitReached;
     private float currentLimitTimer = 0f;
@@ -60,13 +62,7 @@ public class HeightLimitManager : MonoBehaviour
 
     private void UpdateLimitGraphic(bool isLimitReached)
     {
-        if (isLimitReached)
-        {
-            limitRenderer.color = new Color(1f, 0f, 0f, 0.2f);
-        }
-        else
-        {
-            limitRenderer.color = new Color(1f, 1f, 1f, 0.2f);
-        }
+        if (isLimitReached) limitRenderer.color = limitReachedColor;
+        else limitRenderer.color = limitIdleColor;
     }
 }
