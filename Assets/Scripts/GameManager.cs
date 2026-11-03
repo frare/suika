@@ -14,6 +14,8 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
+
+        Time.timeScale = 1f;
     }
 
     protected override void OnDestroy()
