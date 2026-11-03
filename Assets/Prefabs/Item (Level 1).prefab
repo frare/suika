@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDespawning: 0
-  score: 100
+  score: 10
   nextItem: {fileID: 6259267341739755736, guid: 8d660554e1e8fe9479446ea21570aa72, type: 3}
   spriteContainer: {fileID: 7599701168714139686}
   spriteRenderer: {fileID: 6163665809650626771}

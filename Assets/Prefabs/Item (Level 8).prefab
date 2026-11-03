@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5732072326606742593, guid: 9a7db91ad6a9f2046a4f1d9598f122b2, type: 3}
+      propertyPath: score
+      value: 1280
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732072326606742593, guid: 9a7db91ad6a9f2046a4f1d9598f122b2, type: 3}
       propertyPath: nextItem
       value: 
       objectReference: {fileID: 7385600117966599492, guid: 2ad2ba7277f80534dafb555ccde4ed33, type: 3}
