@@ -113,7 +113,7 @@ public class Item : MonoBehaviour
 
         ParticlesManager.Instance.PlayMergeParticles(targetPosition);
 
-        GameManager.Instance.AddScore(this.score + otherItem.score);
+        GameManager.Instance.AddScore(this.score);
 
         otherItem.Despawn();
         this.Despawn();
