@@ -16,6 +16,10 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
 
+    public float MasterVolume => masterVolume;
+    public float MusicVolume => musicVolume;
+    public float SfxVolume => sfxVolume;
+
     private float masterVolume = 1f;
     private float musicVolume = 1f;
     private float sfxVolume = 1f;
@@ -56,7 +60,7 @@ public class AudioManager : Singleton<AudioManager>
     public void SetSfxVolume(float volume)
     {
         sfxVolume = volume;
-        audioMixer.SetFloat("SfxVolume", ConvertVolumeToDecibels(volume));
+        audioMixer.SetFloat("SFXVolume", ConvertVolumeToDecibels(volume));
     }
 
     public void PlaySfx(AudioClip clip, bool randomPitch = true)
@@ -100,7 +104,8 @@ public class AudioManager : Singleton<AudioManager>
 
     private IEnumerator WaitForMusicToEnd()
     {
-        yield return new WaitUntil(() => !musicSource.isPlaying);
+        yield return new WaitForSecondsRealtime(musicSource.clip.length);
+
         NextMusic();
     }
 
