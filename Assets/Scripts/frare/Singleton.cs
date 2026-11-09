@@ -40,7 +40,11 @@ namespace frare
                 instance = this as T;
                 if (DontDestroyWhenLoad) DontDestroyOnLoad(transform.gameObject);
             }
-            else if (instance != this) Destroy(this.gameObject);
+            else if (instance != this) 
+            {
+                Destroy(this.gameObject);
+                return;
+            }
         }
 
         // cleanup
