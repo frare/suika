@@ -7,9 +7,11 @@ public class GameManager : Singleton<GameManager>
 
     public int TotalScore => totalScore;
     public bool IsGameOver => isGameOver;
+    public bool IsPaused => isPaused;
 
     private int totalScore;
     private bool isGameOver;
+    private bool isPaused;
 
     protected override void Awake()
     {
@@ -29,10 +31,18 @@ public class GameManager : Singleton<GameManager>
         MainCanvas.Instance.UpdateScore(totalScore);
     }
 
+    public void SetPaused(bool paused)
+    {
+        if (isGameOver) return; // do not let the game be 'resumed' if game is over
+
+        isPaused = paused;
+        Time.timeScale = paused ? 0f : 1f;
+    }
+
     public void GameOver()
     {
         isGameOver = true;
-        Time.timeScale = 0f;
+        SetPaused(true);
 
         MainCanvas.Instance.ShowGameOverPanel();
     }

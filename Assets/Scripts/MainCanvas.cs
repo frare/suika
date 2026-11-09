@@ -11,6 +11,7 @@ public class MainCanvas : Singleton<MainCanvas>
     [Header("HUD Elements")]
     [SerializeField] private AnimatedCounter scoreCounter;
     [SerializeField] private Image nextItemImage;
+    [SerializeField] private Button pauseButton;
 
     [Header("Game Over Elements")]
     [SerializeField] private GameObject gameOverPanel;
@@ -18,13 +19,18 @@ public class MainCanvas : Singleton<MainCanvas>
     [SerializeField] private Button playAgainButton;
     [SerializeField] private Button mainMenuButton;
 
+    [Header("References")]
+    [SerializeField] private UISettingsPanel settingsPanel;
+
     protected override void Awake()
     {
         base.Awake();
 
         gameOverPanel.SetActive(false);
+
         playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
         mainMenuButton.onClick.AddListener(OnMainMenuButtonClicked);
+        pauseButton.onClick.AddListener(OnPauseButtonClicked);
     }
 
     protected override void OnDestroy()
@@ -40,6 +46,11 @@ public class MainCanvas : Singleton<MainCanvas>
     private void OnMainMenuButtonClicked()
     {
         SceneManager.LoadScene("MenuScene");
+    }
+
+    private void OnPauseButtonClicked()
+    {
+        settingsPanel.Open();
     }
 
     public void UpdateScore(int score)

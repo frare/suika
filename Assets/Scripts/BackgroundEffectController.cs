@@ -18,6 +18,14 @@ public class BackgroundEffectController : MonoBehaviour
         spriteRenderer.sharedMaterial = runtimeMaterial;
     }
 
+    private void Start()
+    {
+        if (SettingsManager.Instance != null) // set the initial state based on the settings
+        {
+            SetEnabled(SettingsManager.Instance.AnimatedBackground);
+        }
+    }
+
     private void OnDestroy()
     {
         if (spriteRenderer != null && spriteRenderer.sharedMaterial == runtimeMaterial)
