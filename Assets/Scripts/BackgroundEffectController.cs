@@ -27,4 +27,12 @@ public class BackgroundEffectController : MonoBehaviour
 
         if (runtimeMaterial != null) Destroy(runtimeMaterial);
     }
+
+    public void SetEnabled(bool enabled)
+    {
+        if (runtimeMaterial != null)
+        {
+            runtimeMaterial.SetFloat("_Enabled", enabled ? 1f : 0f);
+        }
+    }
 }
