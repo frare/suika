@@ -25,6 +25,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "InteractPointer",
+                    "type": "Button",
+                    "id": "dc236761-0404-4afa-9359-b8ac672aefb3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Pointer",
                     "type": "Value",
                     "id": "ed63aaa4-b9e4-4236-b143-d8152cd48959",
@@ -191,23 +200,23 @@
                 },
                 {
                     "name": "",
-                    "id": "99190797-11cb-4d9a-af3d-10442487a00a",
-                    "path": "<Pointer>/press",
-                    "interactions": "Press(behavior=1)",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5bfb2140-5164-496e-9935-32441e7dab4b",
                     "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "Pointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08840244-469d-4cd7-9506-825bfb863d7f",
+                    "path": "<Pointer>/press",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Touch",
+                    "action": "InteractPointer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
