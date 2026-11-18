@@ -5,11 +5,9 @@ public class GameManager : Singleton<GameManager>
 {
     protected override bool DontDestroyWhenLoad => false;
 
-    public int TotalScore => totalScore;
     public bool IsGameOver => isGameOver;
     public bool IsPaused => isPaused;
 
-    private int totalScore;
     private bool isGameOver;
     private bool isPaused;
 
@@ -23,12 +21,6 @@ public class GameManager : Singleton<GameManager>
     protected override void OnDestroy()
     {
         base.OnDestroy();
-    }
-
-    public void AddScore(int amount)
-    {
-        totalScore += amount;
-        MainCanvas.Instance.UpdateScore(totalScore);
     }
 
     public void SetPaused(bool paused)

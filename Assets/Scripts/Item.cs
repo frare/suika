@@ -114,7 +114,7 @@ public class Item : MonoBehaviour
         ParticlesManager.Instance.PlayMergeParticles(targetPosition);
         AudioManager.Instance.PlayMergeSfx();
 
-        GameManager.Instance.AddScore(this.score);
+        ScoreManager.Instance.AddScore(score);
 
         otherItem.Despawn();
         this.Despawn();

@@ -9,7 +9,6 @@ public class MainCanvas : Singleton<MainCanvas>
     protected override bool DontDestroyWhenLoad => false;
 
     [Header("HUD Elements")]
-    [SerializeField] private AnimatedCounter scoreCounter;
     [SerializeField] private Image nextItemImage;
     [SerializeField] private Button pauseButton;
 
@@ -53,11 +52,6 @@ public class MainCanvas : Singleton<MainCanvas>
         settingsPanel.Open();
     }
 
-    public void UpdateScore(int score)
-    {
-        scoreCounter.UpdateCounterText(score);
-    }
-
     public void UpdateNextItem(Item item)
     {
         nextItemImage.sprite = item.SpriteGraphic;
@@ -66,6 +60,6 @@ public class MainCanvas : Singleton<MainCanvas>
     public void ShowGameOverPanel()
     {
         gameOverPanel.SetActive(true);
-        gameOverScoreCounter.UpdateCounterText(GameManager.Instance.TotalScore);
+        gameOverScoreCounter.UpdateCounterText(ScoreManager.Instance.CurrentScore);
     }
 }
