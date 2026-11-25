@@ -12,6 +12,8 @@ public class MainCanvas : Singleton<MainCanvas>
     [SerializeField] private Image nextItemImage;
     [SerializeField] private Button pauseButton;
 
+    [SerializeField] private Button tutorialButton;
+    
     [Header("Game Over Elements")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private AnimatedCounter gameOverScoreCounter;
@@ -20,6 +22,7 @@ public class MainCanvas : Singleton<MainCanvas>
 
     [Header("References")]
     [SerializeField] private UISettingsPanel settingsPanel;
+    [SerializeField] private TutorialManager tutorialManager;
 
     protected override void Awake()
     {
@@ -30,6 +33,7 @@ public class MainCanvas : Singleton<MainCanvas>
         playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
         mainMenuButton.onClick.AddListener(OnMainMenuButtonClicked);
         pauseButton.onClick.AddListener(OnPauseButtonClicked);
+        tutorialButton.onClick.AddListener(OnTutorialButtonClicked);
     }
 
     protected override void OnDestroy()
@@ -50,6 +54,11 @@ public class MainCanvas : Singleton<MainCanvas>
     private void OnPauseButtonClicked()
     {
         settingsPanel.Open();
+    }
+
+    private void OnTutorialButtonClicked()
+    {
+        tutorialManager.ShowPanel();
     }
 
     public void UpdateNextItem(Item item)
